@@ -1,0 +1,37 @@
+[
+    {
+        "isbn": "1001",
+        "title": "Cien años de soledad",
+        "author": "Gabriel García Márquez",
+        "weight": 1.2,
+        "price": 85000
+    },
+    {
+        "isbn": "1002",
+        "title": "El principito",
+        "author": "Antoine de Saint-Exupéry",
+        "weight": 0.5,
+        "price": 35000
+    },
+    {
+        "isbn": "1003",
+        "title": "Rayuela",
+        "author": "Julio Cortázar",
+        "weight": 0.8,
+        "price": 60000
+    },
+    {
+        "isbn": "1004",
+        "title": "La sombra del viento",
+        "author": "Carlos Ruiz Zafón",
+        "weight": 0.9,
+        "price": 72000
+    },
+    {
+        "isbn": "1005",
+        "title": "El amor en los tiempos del cólera",
+        "author": "Gabriel García Márquez",
+        "weight": 1.1,
+        "price": 90000
+    }
+]
