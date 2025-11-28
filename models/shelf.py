@@ -2,9 +2,7 @@ from book import Book
 class Shelf:
     def __init__(self, id_shelf):
         self.id_shelf = id_shelf
-        self.capacity = (
-            20  # Su capacidad es fija ya que cada estante tiene 4 filas 5 columnas
-        )
+        self.capacity = 20  # Su capacidad es fija ya que cada estante tiene 4 filas 5 columnas
         self.books = [
             [None for _ in range(4)] for _ in range(5)
         ]  # Matriz 4x5 para almacenar books
@@ -13,11 +11,9 @@ class Shelf:
         if not isinstance(book, Book):
             raise TypeError("Debe ser un objeto de tipo Book")
         for i in range(5):
-            shelf_weight = sum(
-                b.weight for b in self.books[i] if b is not None
-            )  # Peso total actual de la fila
+            shelf_weight = sum(b.weight for b in self.books[i] if b is not None)  # Peso total actual de la fila
 
-            if shelf_weight + book.weight > 8:  # Peso total actual de la fila
+            if shelf_weight + book.weight > 8:  # Poda por peso
                 continue
             for j in range(4):  # Buscar espacio vacío
                 if self.books[i][j] is None:
@@ -28,9 +24,7 @@ class Shelf:
     def remove_book(self, isbn):
         for i in range(5):
             for j in range(4):
-                if (
-                    self.books[i][j] is not None and self.books[i][j].isbn == isbn
-                ):  # Encontrar el libro por ISBN
+                if (self.books[i][j] is not None and self.books[i][j].isbn == isbn):  # Encontrar el libro por ISBN
                     self.books[i][j] = None
                     return True
         return False
@@ -38,9 +32,7 @@ class Shelf:
     def find_book(self, isbn):
         for i in range(5):
             for j in range(4):
-                if (
-                    self.books[i][j] is not None and self.books[i][j].isbn == isbn
-                ):  # Encontrar el libro por ISBN
+                if (self.books[i][j] is not None and self.books[i][j].isbn == isbn):  # Encontrar el libro por ISBN
                     return (i, j) # Retornar la posición (fila, columna) ojoooo hay que desempaquetar la tupla al usarla
         return None
 
