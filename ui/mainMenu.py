@@ -1,8 +1,8 @@
 import sys
 from ui.inventory_menu import inventory_menu
 from ui.shelf_menu import shelf_menu  # Cuando lo crees
-from ui.loanMenu import loan_menu  # Si ya existe
-from ui.userMenu import user_menu  # Si ya existe
+from ui.loan_menu import loan_menu  # Si ya existe
+from ui.user_menu import user_menu  # Si ya existe
 
 
 def clear_screen():

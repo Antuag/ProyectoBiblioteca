@@ -1,0 +1,13 @@
+[
+    {
+        "loan_id": "3c6219e6-ff3a-411f-a149-ddb9721655a9",
+        "isbn": "123456",
+        "book_title": "cien años de soledad",
+        "user_id": "2",
+        "user_name": "andres el gay",
+        "loan_date": "2025-11-30",
+        "expiration_date": "2025-12-05",
+        "returned": true,
+        "return_date": "2025-11-30"
+    }
+]

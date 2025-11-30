@@ -1,27 +1,9 @@
 [
     {
-        "id": "1000",
-        "nombre": "Juan",
-        "edad": "19"
-    },
-    {
-        "id": "5322123",
-        "nombre": "Carlos",
-        "edad": "19"
-    },
-    {
-        "id": "30337212",
-        "nombre": "Maria",
-        "edad": "19"
-    },
-    {
-        "id": "101",
-        "name": "Aj",
-        "loans": []
-    },
-    {
-        "id": "102",
-        "name": "Sr",
+        "id": "2",
+        "name": "andres el gay",
+        "email": "soygay@gmail.com",
+        "phone": "25198981",
         "loans": []
     }
 ]
