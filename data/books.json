@@ -1,0 +1,29 @@
+[
+    {
+        "isbn": "1234567",
+        "title": "harry potter",
+        "author": "un niña",
+        "weight": 3.0,
+        "value": 20000,
+        "stock": 10,
+        "reservations": []
+    },
+    {
+        "isbn": "123456",
+        "title": "cien años de soledad",
+        "author": "gabriel garcia",
+        "weight": 3.0,
+        "value": 50000,
+        "stock": 7,
+        "reservations": []
+    },
+    {
+        "isbn": "12345",
+        "title": "andres es gay",
+        "author": "fabian torres",
+        "weight": 2.0,
+        "value": 100000,
+        "stock": 22,
+        "reservations": []
+    }
+]
