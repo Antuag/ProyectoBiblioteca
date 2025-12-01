@@ -1,1 +1,0 @@
-"Préstamos, devoluciones, interacción pila/cola"

@@ -1,12 +1,12 @@
 from structures.queue import Queue
 class Book:
     
-    def __init__(self,isbn,title,author,weigth,value,stock=1):
+    def __init__(self,isbn,title,author,weight,value,stock=1):
         
         self.isbn = str(isbn)
         self.title = title
         self.author = author
-        self.weigth = float(weigth)
+        self.weight = float(weight)
         self.value = int(value)
         self.stock = int(stock)
         self.reservations = Queue()
@@ -24,11 +24,11 @@ class Book:
             "isbn": self.isbn,
             "title": self.title,
             "author": self.author,
-            "weigth": self.weigth,
+            "weight": self.weight,
             "value": self.value,
             "stock": self.stock,
             "reservation": self.reservations.toList()
         }
         
     def __str__(self):
-        return f"[{self.isbn}] {self.title} - {self.author} | {self.weigth} | {self.value} | {self.stock} | {self.reservations}"
+        return f"[{self.isbn}] {self.title} - {self.author} | {self.weight} | {self.value} | {self.stock} | {self.reservations}"
