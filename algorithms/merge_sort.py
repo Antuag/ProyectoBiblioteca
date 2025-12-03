@@ -64,3 +64,32 @@ def merge_pairs(left, right):
     sorted_list.extend(left[i:])
     sorted_list.extend(right[j:])
     return sorted_list
+
+
+def merge_sort_books_by_isbn(books):
+    """Ordena libros por ISBN usando Merge Sort."""
+    if len(books) <= 1:
+        return books
+
+    mid = len(books) // 2
+    left = merge_sort_books_by_isbn(books[:mid])
+    right = merge_sort_books_by_isbn(books[mid:])
+
+    return merge_isbn(left, right)
+
+
+def merge_isbn(left, right):
+    sorted_list = []
+    i = j = 0
+
+    while i < len(left) and j < len(right):
+        if str(left[i].isbn) <= str(right[j].isbn):
+            sorted_list.append(left[i])
+            i += 1
+        else:
+            sorted_list.append(right[j])
+            j += 1
+
+    sorted_list.extend(left[i:])
+    sorted_list.extend(right[j:])
+    return sorted_list

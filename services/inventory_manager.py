@@ -17,7 +17,6 @@ from services.book_service import (
     get_book_by_isbn
 )
 
-from algorithms.linear_search import linear_search_books_by_title, linear_search_books_by_author
 from algorithms.merge_sort import merge_sort_books_by_value
 
 
@@ -52,23 +51,6 @@ class InventoryManager:
     # SEARCHING (LINEAR SEARCH ALGORITHMS)
     # ----------------------------------------------
 
-    
-    def search_by_title(title: str):
-        """
-        Returns a list of books whose title matches partially,
-        using linear search algorithm.
-        """
-        books = get_all_books()
-        return linear_search_books_by_title(books, title)
-
-    
-    def search_by_author(author: str):
-        """
-        Returns a list of books whose author matches partially,
-        using linear search algorithm.
-        """
-        books = get_all_books()
-        return linear_search_books_by_author(books, author)
 
     # ----------------------------------------------
     # SORTING (MERGE SORT)

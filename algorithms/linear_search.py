@@ -1,26 +1,15 @@
 """
 Linear Search Algorithms for Books
-----------------------------------
-These functions implement classic linear search required by the project.
 """
 
-def linear_search_books_by_title(books, title):
+def linear_search_books(books, title=None, author=None):
     result = []
-    title = title.lower()
-
     for book in books:
-        if title in book.title.lower():
+        matches = True
+        if title:
+            matches = matches and (title.lower() in book.title.lower())
+        if author:
+            matches = matches and (author.lower() in book.author.lower())
+        if matches:
             result.append(book)
-
-    return result
-
-
-def linear_search_books_by_author(books, author):
-    result = []
-    author = author.lower()
-
-    for book in books:
-        if author in book.author.lower():
-            result.append(book)
-
     return result

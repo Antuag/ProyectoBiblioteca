@@ -10,14 +10,16 @@ from services.book_service import (
     get_book_by_isbn as service_get_book_by_isbn,
     update_book as service_update_book,
     delete_book as service_delete_book,
-    search_books_by_title as service_search_books_by_title,
-    search_books_by_author as service_search_books_by_author,
     get_available_books as service_get_available_books,
     get_low_stock_books as service_get_low_stock_books,
     update_stock as service_update_stock,
     get_inventory_stats as service_get_inventory_stats
 )
 from models.book import Book
+"algoritmo para busqueda lineal por titulo o autor o isbn en busqueda binaria, "
+from algorithms.linear_search import linear_search_books
+from algorithms.binary_search import binary_search_isbn 
+from algorithms.merge_sort import merge_sort_books_by_isbn
 
 
 def clear_screen():
@@ -133,50 +135,77 @@ def list_all_books():
 
 
 def search_book():
-    """Opción 3: Buscar libro"""
+    """Opción 3: Buscar libro (usa algoritmo de búsqueda lineal y binaria)."""
     print_header("BUSCAR LIBRO")
-    
+
     print("\n¿Cómo desea buscar?")
-    print("1. Por ISBN")
-    print("2. Por título")
-    print("3. Por autor")
-    
+    print("1. Por ISBN (búsqueda binaria)")
+    print("2. Por título (búsqueda lineal)")
+    print("3. Por autor (búsqueda lineal)")
+
     option = input("\nSeleccione una opción: ").strip()
-    
+
+    # -------------------------------
+    # 1. BUSCAR POR ISBN (BINARIA)
+    # -------------------------------
     if option == "1":
+        books = merge_sort_books_by_isbn(service_get_all_books())
         isbn = input("\nIngrese ISBN: ").strip()
-        book = service_get_book_by_isbn(isbn)
-        
+        book = binary_search_isbn(books, isbn)
+
         if book:
             print("\n✅ Libro encontrado:")
             print_book(book)
         else:
             print(f"\n❌ No se encontró ningún libro con el ISBN: {isbn}")
-    
-    elif option == "2":
-        title = input("\nIngrese título (búsqueda parcial): ").strip()
-        books = service_search_books_by_title(title)
-        
-        if books:
-            print(f"\n✅ Se encontraron {len(books)} libro(s):")
-            for i, book in enumerate(books):
+        return
+
+    # -------------------------------
+    # OBTENER LISTA DE LIBROS
+    # -------------------------------
+    books = service_get_all_books()
+
+    if not books:
+        print("\n❌ No hay libros en el inventario.")
+        return
+
+    # -------------------------------
+    # 2. BÚSQUEDA LINEAL POR TÍTULO
+    # -------------------------------
+    if option == "2":
+        title = input("\nIngrese título (coincidencia parcial): ").strip()
+
+        # tu algoritmo lineal aquí ⬇⬇⬇
+        matches = linear_search_books(books, title=title)
+
+        if matches:
+            print(f"\n✅ Se encontraron {len(matches)} libro(s):")
+            for i, book in enumerate(matches):
                 print_book(book, i)
         else:
-            print(f"\n❌ No se encontraron libros con el título: {title}")
-    
+            print(f"\n❌ No se encontraron libros que coincidan con: {title}")
+        return
+
+    # -------------------------------
+    # 3. BÚSQUEDA LINEAL POR AUTOR
+    # -------------------------------
     elif option == "3":
-        author = input("\nIngrese autor (búsqueda parcial): ").strip()
-        books = service_search_books_by_author(author)
-        
-        if books:
-            print(f"\n✅ Se encontraron {len(books)} libro(s):")
-            for i, book in enumerate(books):
+        author = input("\nIngrese autor (coincidencia parcial): ").strip()
+
+        # otra vez tu algoritmo lineal ⬇⬇⬇
+        matches = linear_search_books(books, author=author)
+
+        if matches:
+            print(f"\n✅ Se encontraron {len(matches)} libro(s):")
+            for i, book in enumerate(matches):
                 print_book(book, i)
         else:
             print(f"\n❌ No se encontraron libros del autor: {author}")
-    
+        return
+
     else:
-        print("\n❌ Opción no válida")
+        print("\n❌ Opción no válida.")
+
 
 
 def update_book_info():

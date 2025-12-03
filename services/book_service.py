@@ -1,5 +1,6 @@
 from models.book import Book
 from pathlib import Path
+from algorithms.insertion_sort import insertion_sort_books_by_isbn
 import json
 
 # Ruta segura (independiente del lugar donde ejecutes el programa)
@@ -60,7 +61,7 @@ def _dict_to_book(book_dict):
 def create_book(book: Book):
     """
     Crea un nuevo libro en el inventario.
-    Si ya existe un libro con el mismo ISBN, no lo crea y retorna None.
+    Mantiene el inventario ORDENADO por ISBN usando Insertion Sort.
     """
     if not isinstance(book, Book):
         raise TypeError("Debe ser un objeto de tipo Book")
@@ -70,14 +71,19 @@ def create_book(book: Book):
     # Verificar si ya existe un libro con ese ISBN
     for existing_book in books_list:
         if existing_book["isbn"] == book.isbn:
-            print(f"Ya existe un libro con el ISBN: {book.isbn}")
+            print(f"❌ Ya existe un libro con el ISBN: {book.isbn}")
             return None
     
-    # Convertir el Book a diccionario y agregarlo
+    # Convertir el Book a diccionario
     book_dict = _book_to_dict(book)
-    books_list.append(book_dict)
     
-    # Guardar archivo
+    # Agregar el libro nuevo
+    books_list.append(book_dict)
+
+    # 🔥 ORDENAR LA LISTA POR ISBN (Requisito del proyecto)
+    insertion_sort_books_by_isbn(books_list)
+
+    # Guardar inventario ordenado
     _save_books(books_list)
     
     return book

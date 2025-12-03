@@ -9,5 +9,16 @@
         "expiration_date": "2025-12-05",
         "returned": true,
         "return_date": "2025-11-30"
+    },
+    {
+        "loan_id": "19a47ce4-449c-4291-844e-cce27797953e",
+        "isbn": "9780141439518",
+        "book_title": "Orgullo y Prejuicio",
+        "user_id": "2",
+        "user_name": "andres el gay",
+        "loan_date": "2025-12-03",
+        "expiration_date": "2025-12-13",
+        "returned": false,
+        "return_date": null
     }
 ]

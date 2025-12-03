@@ -4,7 +4,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # --- Algoritmos ---
 from algorithms.merge_sort import merge_sort_pairs
-from algorithms.report_utils import recursive_show_stack, recursive_show_queue
+from algorithms.report_recursive import recursive_show_stack, recursive_show_queue
 
 # --- Servicios ---
 from services.book_service import get_all_books, get_book_by_isbn
