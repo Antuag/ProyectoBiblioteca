@@ -61,7 +61,15 @@ def _dict_to_book(book_dict):
     # Reconstruir reservaciones si existen
     if "reservations" in book_dict:
         for r in book_dict["reservations"]:
-            book.reservations.enqueue(r)
+            # Normalizar: aceptar tanto string como dict
+            if isinstance(r, str):
+                reservation = {
+                    "user_id": r,
+                    "date": "unknown"
+                }
+            else:
+                reservation = r
+            book.reservations.enqueue(reservation)
 
     return book
 
@@ -273,3 +281,43 @@ def get_inventory_stats():
         "out_of_stock": out_of_stock,
         "total_inventory_value": total_value
     }
+# ==============================================================
+# RESERVATIONS QUEUE HELPERS
+# ==============================================================
+
+def dequeue_reservation(isbn):
+    """
+    Dequeue the next reservation (FIFO) for a given book.
+    It uses binary search on the ordered inventory to locate the book.
+
+    Args:
+        isbn (str): Book ISBN
+
+    Returns:
+        dict | None: reservation {"user_id": ..., "date": ...} or None if empty
+    """
+    book = get_book_by_isbn(isbn)  # binary search over ordered list
+    if not book:
+        print(f"❌ Book with ISBN {isbn} not found while checking reservations.")
+        return None
+
+    if book.reservations.is_empty():
+        return None
+
+    next_reservation = book.reservations.dequeue()
+    update_book(book)
+    return next_reservation
+
+
+def has_reservations(isbn):
+    """
+    Check if a book has pending reservations.
+
+    Args:
+        isbn (str): Book ISBN
+
+    Returns:
+        bool
+    """
+    book = get_book_by_isbn(isbn)
+    return bool(book and not book.reservations.is_empty())

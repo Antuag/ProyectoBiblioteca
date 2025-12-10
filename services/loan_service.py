@@ -1,10 +1,14 @@
 from models.loan import Loan
-from services.book_service import update_stock
 from pathlib import Path
 import json
 from datetime import datetime, timedelta
 from services.history_service import push_history
-from services.book_service import update_book
+from models.loan import Loan
+from services.book_service import update_stock, update_book, dequeue_reservation
+from pathlib import Path
+import json
+from datetime import datetime, timedelta
+from services.history_service import push_history
 
 
 # Ruta segura (independiente del lugar donde ejecutes el programa)
@@ -61,65 +65,77 @@ def _dict_to_loan(loan_dict):
 
 def create_loan(isbn, user_id, days=14):
     """
-    Crea un nuevo préstamo.
-    
+    Crea un nuevo préstamo o, si no hay stock, registra una reserva.
+
     Args:
         isbn: ISBN del libro a prestar
         user_id: ID del usuario que solicita el préstamo
         days: Días de duración del préstamo (por defecto 14)
-    
+
     Returns:
-        Loan object si se creó exitosamente, None en caso contrario
+        Loan object si se creó exitosamente, None en caso contrario.
     """
-    from services.book_service import get_book_by_isbn, update_stock
+    from services.book_service import get_book_by_isbn
     from services.user_service import get_user_by_id, update_user
-    
-    # Verificar que el libro existe y tiene stock
+
+    # Verificar que el libro exista
     book = get_book_by_isbn(isbn)
     if not book:
         print(f"❌ No se encontró un libro con el ISBN: {isbn}")
         return None
-    
+
+    # ============================
+    # CASO 1: SIN STOCK → RESERVA
+    # ============================
     if not book.isAvalible():
-        print("\n⚠️ Este libro no tiene stock.")
+        print("\n⚠️ Este libro no tiene stock. Se gestionará como reserva.")
 
-    # Si el libro NO tiene stock → agregar a cola del book
-    if not book.isAvalible():
+        # Obtenemos la lista actual de reservas desde la cola
+        current_reservations = book.reservations.toList()
 
-    # evitar duplicados
-        for r in book.reservations.queue:
-            if r["user_id"] == user_id:
-                print("❌ Ya estás en la lista de espera.")
-                return None
+        # Evitar duplicados del mismo usuario (soporta dicts y strings antiguos)
+        for r in current_reservations:
+            if isinstance(r, dict):
+                if r.get("user_id") == user_id:
+                    print("❌ Ya estás en la lista de espera para este libro.")
+                    return None
+            else:
+                # Formato viejo: solo "2"
+                if r == user_id:
+                    print("❌ Ya estás en la lista de espera para este libro.")
+                    return None
 
-    # agregar a la cola interna del libro
+        # Agregar a la cola interna del libro
         book.reservations.enqueue({
             "user_id": user_id,
             "date": datetime.now().strftime("%Y-%m-%d")
         })
 
-    # guardar en books.json
+        # Guardar cambios en books.json
         update_book(book)
 
-        print("📌 Se agregó el usuario a la lista de espera (cola FIFO).")
+        print("📌 Usuario agregado a la cola FIFO.")
         return None
-    
-    
-    # Verificar que el usuario existe
+
+    # ============================
+    # CASO 2: HAY STOCK → PRÉSTAMO
+    # ============================
+
+    # Verificar que el usuario exista
     user = get_user_by_id(user_id)
     if not user:
         print(f"❌ No se encontró un usuario con el ID: {user_id}")
         return None
-    
+
     # Verificar límite de préstamos del usuario
     if not user.can_borrow():
         print(f"❌ El usuario '{user.name}' ha alcanzado el límite de préstamos activos")
         return None
-    
+
     # Calcular fechas
     loan_date = datetime.now()
     expiration_date = loan_date + timedelta(days=days)
-    
+
     # Crear el préstamo
     new_loan = Loan(
         book=book,
@@ -127,25 +143,24 @@ def create_loan(isbn, user_id, days=14):
         loan_date=loan_date.strftime("%Y-%m-%d"),
         expiration_date=expiration_date.strftime("%Y-%m-%d")
     )
-    
-    # Guardar en JSON
+
+    # Guardar en loans.json
     loans_list = _load_loans()
     loan_dict = _loan_to_dict(new_loan)
     loans_list.append(loan_dict)
     _save_loans(loans_list)
-    
+
     # Actualizar stock del libro (restar 1)
     update_stock(isbn, -1)
-    
+
     # Agregar préstamo al usuario
     user.add_loan(new_loan.loan_id)
     update_user(user)
-    
-    #historial en pila lifo
-    push_history(user_id, isbn)
-    
-    return new_loan
 
+    # Registrar en historial (pila LIFO)
+    push_history(user_id, isbn)
+
+    return new_loan
 
 def return_loan(loan_id):
     """

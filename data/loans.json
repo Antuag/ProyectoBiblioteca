@@ -18,18 +18,51 @@
         "user_name": "andres el gay",
         "loan_date": "2025-12-03",
         "expiration_date": "2025-12-13",
-        "returned": false,
-        "return_date": null
+        "returned": true,
+        "return_date": "2025-12-10"
     },
     {
-        "loan_id": "5dcc8e85-4ded-465f-b23b-239fd09aacca",
-        "isbn": "9780060935467",
-        "book_title": "Cien Años de Soledad",
+        "loan_id": "97c696fc-5171-41c4-80b3-6ff01339a5b1",
+        "isbn": "9780316769488",
+        "book_title": "La Elegancia del Erizo",
         "user_id": "2",
-        "user_name": "andres el gay",
-        "loan_date": "2025-12-09",
+        "user_name": "andres sopla pollas",
+        "loan_date": "2025-12-10",
+        "expiration_date": "2025-12-13",
+        "returned": true,
+        "return_date": "2025-12-10"
+    },
+    {
+        "loan_id": "3d8eef7e-7717-45e0-b4be-0e3c09461db4",
+        "isbn": "9788466331579",
+        "book_title": "La Casa de los Espíritus",
+        "user_id": "2",
+        "user_name": "andres sopla pollas",
+        "loan_date": "2025-12-10",
         "expiration_date": "2025-12-19",
-        "returned": false,
-        "return_date": null
+        "returned": true,
+        "return_date": "2025-12-10"
+    },
+    {
+        "loan_id": "8a64129f-8194-4d59-9762-e9188d32b249",
+        "isbn": "9789999999999",
+        "book_title": "El nombre de la tierra",
+        "user_id": "2",
+        "user_name": "andres sopla pollas",
+        "loan_date": "2025-12-10",
+        "expiration_date": "2025-12-17",
+        "returned": true,
+        "return_date": "2025-12-10"
+    },
+    {
+        "loan_id": "a80a4664-c39c-48ee-8e5b-b9ed95318771",
+        "isbn": "9789999999999",
+        "book_title": "El nombre de la tierra",
+        "user_id": "2",
+        "user_name": "andres sopla pollas",
+        "loan_date": "2025-12-10",
+        "expiration_date": "2025-12-14",
+        "returned": true,
+        "return_date": "2025-12-10"
     }
 ]

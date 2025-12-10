@@ -4,9 +4,13 @@
         "name": "andres sopla pollas",
         "email": "soygay@gmail.com",
         "phone": "25198981",
-        "loans": [
-            "19a47ce4-449c-4291-844e-cce27797953e",
-            "5dcc8e85-4ded-465f-b23b-239fd09aacca"
-        ]
+        "loans": []
+    },
+    {
+        "id": "3",
+        "name": "Fabian Elva ginon",
+        "email": null,
+        "phone": null,
+        "loans": []
     }
 ]

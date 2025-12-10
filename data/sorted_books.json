@@ -1,30 +1,5 @@
 [
     {
-        "isbn": "9780060935467",
-        "title": "Cien Años de Soledad",
-        "author": "Gabriel García Márquez",
-        "weight": 0.5,
-        "value": 42000,
-        "stock": 0,
-        "reservations": [
-            "2"
-        ]
-    },
-    {
-        "isbn": "9780062315007",
-        "title": "Matar a un Ruiseñor",
-        "author": "Harper Lee",
-        "weight": 0.4,
-        "value": 36000,
-        "stock": 0,
-        "reservations": [
-            {
-                "user_id": "2",
-                "date": "2025-12-09"
-            }
-        ]
-    },
-    {
         "isbn": "9780062316097",
         "title": "El Silencio de los Corderos",
         "author": "Thomas Harris",
@@ -39,7 +14,7 @@
         "author": "Jane Austen",
         "weight": 0.4,
         "value": 35000,
-        "stock": 14,
+        "stock": 15,
         "reservations": []
     },
     {
@@ -70,6 +45,15 @@
         "reservations": []
     },
     {
+        "isbn": "9780307346605",
+        "title": "El niño de la pijama de rayas",
+        "author": "Jhon Boyne",
+        "weight": 0.4,
+        "value": 30000,
+        "stock": 2,
+        "reservations": []
+    },
+    {
         "isbn": "9780307474278",
         "title": "El Código Da Vinci",
         "author": "Dan Brown",
@@ -79,12 +63,12 @@
         "reservations": []
     },
     {
-        "isbn": "9780316769174",
-        "title": "El Guardián Entre el Centeno",
-        "author": "J.D. Salinger",
-        "weight": 0.35,
-        "value": 32000,
-        "stock": 8,
+        "isbn": "9780316015844",
+        "title": "Crepusculo",
+        "author": "Stephenie Meyer",
+        "weight": 0.55,
+        "value": 38000,
+        "stock": 12,
         "reservations": []
     },
     {
@@ -160,15 +144,6 @@
         "reservations": []
     },
     {
-        "isbn": "9780547928227",
-        "title": "El Hobbit",
-        "author": "J.R.R. Tolkien",
-        "weight": 0.5,
-        "value": 48000,
-        "stock": 18,
-        "reservations": []
-    },
-    {
         "isbn": "9780553418026",
         "title": "Divergente",
         "author": "Veronica Roth",
@@ -238,6 +213,15 @@
         "weight": 0.55,
         "value": 46000,
         "stock": 11,
+        "reservations": []
+    },
+    {
+        "isbn": "9789999999999",
+        "title": "El nombre de la tierra",
+        "author": "El nuevo patrick",
+        "weight": 1.0,
+        "value": 50000,
+        "stock": 22,
         "reservations": []
     }
 ]

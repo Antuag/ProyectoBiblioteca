@@ -419,31 +419,34 @@ def view_low_stock_books():
 
 
 def show_reservation_queue():
-    isbn = input("ISBN del libro: ").strip()
+    """Muestra la cola de reservas (FIFO) de un libro sin modificarla."""
+    print_header("LISTA DE ESPERA DE UN LIBRO")
 
+    isbn = input("ISBN del libro: ").strip()
     book = service_get_book_by_isbn(isbn)
 
     if not book:
         print("\n❌ El libro no existe.")
         return
 
-    if book.reservations.is_empty():
+    # Obtener una copia de la cola como lista
+    reservations = book.reservations.toList()
+
+    if not reservations:
         print("\n📭 No hay reservas para este libro.")
         return
 
-    print("\n📚 Lista de espera (orden FIFO):\n")
+    print(f"\n📚 Lista de espera para: {book.title}\n")
 
-    # Mostrar sin modificar la cola real
-    temp = []
-
-    while not book.reservations.is_empty():
-        user_id = book.reservations.dequeue()
-        temp.append(user_id)
-        book.reservations.enqueue(user_id)  # volver a ponerlo
-
-    for idx, user_id in enumerate(temp, start=1):
-        print(f"{idx}. Usuario: {user_id}")
-
+    for idx, r in enumerate(reservations, start=1):
+        # r puede ser dict {"user_id": ..., "date": ...} o un string antiguo
+        if isinstance(r, dict):
+            user_id = r.get("user_id", "unknown")
+            date = r.get("date", "unknown")
+            print(f"{idx}. Usuario: {user_id} | Fecha de reserva: {date}")
+        else:
+            # caso viejo: solo el ID como string
+            print(f"{idx}. Usuario: {r}")
 
 
 def view_inventory_stats():
