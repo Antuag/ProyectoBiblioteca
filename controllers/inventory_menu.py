@@ -13,13 +13,16 @@ from services.book_service import (
     get_available_books as service_get_available_books,
     get_low_stock_books as service_get_low_stock_books,
     update_stock as service_update_stock,
-    get_inventory_stats as service_get_inventory_stats
+    get_inventory_stats as service_get_inventory_stats,
+    get_ordered_books as service_get_ordered_books
+
 )
 from models.book import Book
 "algoritmo para busqueda lineal por titulo o autor o isbn en busqueda binaria, "
 from algorithms.linear_search import linear_search_books
 from algorithms.binary_search import binary_search_isbn 
 from algorithms.merge_sort import merge_sort_books_by_isbn
+
 
 
 def clear_screen():
@@ -133,6 +136,21 @@ def list_all_books():
     for i, book in enumerate(books):
         print_book(book, i)
 
+def list_books_sorted_by_isbn():
+    """Lista los libros ordenados por ISBN usando Merge Sort."""
+    print_header("INVENTARIO ORDENADO POR ISBN (MERGE SORT)")
+    
+    books = service_get_all_books()
+    if not books:
+        print("\n📦 El inventario está vacío")
+        return
+
+    sorted_books = merge_sort_books_by_isbn(books)
+
+    print(f"\nTotal de libros: {len(sorted_books)}")
+    for i, book in enumerate(sorted_books):
+        print_book(book, i)
+    
 
 def search_book():
     """Opción 3: Buscar libro (usa algoritmo de búsqueda lineal y binaria)."""
@@ -400,6 +418,34 @@ def view_low_stock_books():
         print("\n❌ Error: Ingrese un número válido")
 
 
+def show_reservation_queue():
+    isbn = input("ISBN del libro: ").strip()
+
+    book = service_get_book_by_isbn(isbn)
+
+    if not book:
+        print("\n❌ El libro no existe.")
+        return
+
+    if book.reservations.is_empty():
+        print("\n📭 No hay reservas para este libro.")
+        return
+
+    print("\n📚 Lista de espera (orden FIFO):\n")
+
+    # Mostrar sin modificar la cola real
+    temp = []
+
+    while not book.reservations.is_empty():
+        user_id = book.reservations.dequeue()
+        temp.append(user_id)
+        book.reservations.enqueue(user_id)  # volver a ponerlo
+
+    for idx, user_id in enumerate(temp, start=1):
+        print(f"{idx}. Usuario: {user_id}")
+
+
+
 def view_inventory_stats():
     """Opción 9: Ver estadísticas del inventario"""
     print_header("ESTADÍSTICAS DEL INVENTARIO")
@@ -419,13 +465,15 @@ def show_menu():
     print_header("SISTEMA DE GESTIÓN DE INVENTARIO")
     print("\n1. Agregar nuevo libro")
     print("2. Listar todos los libros")
-    print("3. Buscar libro")
-    print("4. Actualizar información de libro")
-    print("5. Gestionar stock")
-    print("6. Eliminar libro")
-    print("7. Ver libros disponibles")
-    print("8. Ver libros con stock bajo")
-    print("9. Ver estadísticas del inventario")
+    print("3. Listar todos los libros ordenados por isbn")
+    print("4. Buscar libro")
+    print("5. Actualizar información de libro")
+    print("6. Gestionar stock")
+    print("7. Eliminar libro")
+    print("8. Ver libros disponibles")
+    print("9. Ver libros con stock bajo")
+    print("10. Ver estadísticas del inventario")
+    print("11. Ver lista de espera de un libro")
     print("0. Salir")
 
 
@@ -442,19 +490,23 @@ def inventory_menu():
         elif option == "2":
             list_all_books()
         elif option == "3":
-            search_book()
+            list_books_sorted_by_isbn()
         elif option == "4":
-            update_book_info()
+            search_book()
         elif option == "5":
-            manage_stock()
+            update_book_info()
         elif option == "6":
-            delete_book()
+            manage_stock()
         elif option == "7":
-            view_available_books()
+            delete_book()
         elif option == "8":
-            view_low_stock_books()
+            view_available_books()
         elif option == "9":
+            view_low_stock_books()
+        elif option == "10":
             view_inventory_stats()
+        elif option == "11":
+            show_reservation_queue()   
         elif option == "0":
             print("\n👋 Regresando al menú principal...")
             break  # Sale del bucle y regresa al menú principal

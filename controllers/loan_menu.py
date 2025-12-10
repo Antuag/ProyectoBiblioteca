@@ -1,55 +1,51 @@
 import sys
 import os
 
-# Agregar el directorio raíz al path para poder importar los módulos
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from services.loan_service import (
-    create_loan as service_create_loan,
+    create_loan,
     return_loan as service_return_loan,
     get_all_loans as service_get_all_loans,
     get_active_loans as service_get_active_loans,
     get_overdue_loans as service_get_overdue_loans,
     get_loans_by_user as service_get_loans_by_user,
     get_loans_by_book as service_get_loans_by_book,
-    get_loan_by_id as service_get_loan_by_id,
     renew_loan as service_renew_loan,
     get_loan_statistics as service_get_loan_statistics
 )
+
 from services.book_service import get_book_by_isbn as service_get_book_by_isbn
 from services.user_service import get_user_by_id as service_get_user_by_id
+from services.book_service import update_book
 from models.loan import Loan
+from datetime import datetime
 
 
 def clear_screen():
-    """Limpia la consola"""
     print("\n" * 2)
 
 
 def pause():
-    """Pausa la ejecución hasta que el usuario presione Enter"""
     input("\nPresiona Enter para continuar...")
 
 
 def print_header(title):
-    """Imprime un encabezado formateado"""
     print("\n" + "=" * 60)
     print(f"  {title}")
     print("=" * 60)
 
 
 def print_loan(loan: Loan, index=None):
-    """Imprime la información de un préstamo de forma formateada"""
     prefix = f"[{index + 1}]" if index is not None else "→"
-    
     status = "✅ Devuelto" if loan.returned else ("⚠️ Vencido" if loan.is_overdue() else "📖 Activo")
-    
+
     print(f"\n{prefix} ID: {loan.loan_id[:8]}...")
     print(f"   Libro: {loan.book.title}")
     print(f"   Usuario: {loan.user.name}")
     print(f"   Fecha préstamo: {loan.loan_date.strftime('%Y-%m-%d')}")
     print(f"   Fecha vencimiento: {loan.expiration_date.strftime('%Y-%m-%d')}")
-    
+
     if loan.returned:
         print(f"   Fecha devolución: {loan.return_date.strftime('%Y-%m-%d')}")
     else:
@@ -57,372 +53,280 @@ def print_loan(loan: Loan, index=None):
             print(f"   Días de retraso: {loan.days_overdue()}")
         else:
             print(f"   Días hasta vencimiento: {loan.days_until_due()}")
-    
+
     print(f"   Estado: {status}")
 
 
-def create_loan():
-    """Opción 1: Crear un nuevo préstamo"""
+# -------------------------------
+#  Opción 1 - Crear préstamo
+# -------------------------------
+def option_create_loan():
     print_header("CREAR NUEVO PRÉSTAMO")
-    
-    # Solicitar ISBN del libro
+
     isbn = input("\nIngrese ISBN del libro: ").strip()
     if not isbn:
-        print("❌ El ISBN no puede estar vacío")
+        print("❌ ISBN vacío")
         return
-    
-    # Verificar que el libro existe
+
     book = service_get_book_by_isbn(isbn)
     if not book:
-        print(f"❌ No se encontró un libro con el ISBN: {isbn}")
+        print("❌ Libro no encontrado")
         return
-    
+
     print(f"\n📖 Libro: {book.title}")
-    print(f"   Autor: {book.author}")
-    print(f"   Stock disponible: {book.stock}")
-    
+    print(f"Stock disponible: {book.stock}")
+
+    user_id = input("\nIngrese ID del usuario: ").strip()
+    if not user_id:
+        print("❌ ID vacío")
+        return
+
+    user = service_get_user_by_id(user_id)
+    if not user:
+        print("❌ Usuario no encontrado")
+        return
+
+    print(f"\n👤 Usuario: {user.name}")
+
+    # SI NO HAY STOCK → Reserva automática
     if not book.isAvalible():
-        print("\n❌ Este libro no tiene stock disponible")
-        return
-    
-    # Solicitar ID del usuario
-    user_id = input("\nIngrese ID del usuario: ").strip()
-    if not user_id:
-        print("❌ El ID del usuario no puede estar vacío")
-        return
-    
-    # Verificar que el usuario existe
-    user = service_get_user_by_id(user_id)
-    if not user:
-        print(f"❌ No se encontró un usuario con el ID: {user_id}")
-        return
-    
-    print(f"\n👤 Usuario: {user.name}")
-    print(f"   Préstamos activos: {len(user.loans)}")
-    
-    if not user.can_borrow():
-        print("\n❌ Este usuario ha alcanzado el límite de préstamos activos (máximo 3)")
-        return
-    
-    # Solicitar días de préstamo
-    try:
-        days_input = input("\nIngrese días de préstamo (por defecto 14): ").strip()
-        days = int(days_input) if days_input else 14
-        
-        if days <= 0:
-            print("❌ Los días deben ser mayor a 0")
+        print("\n⚠️ No hay stock → Reserva automática")
+
+        if any(r == user_id for r in list(book.reservations.items)):
+            print("❌ El usuario YA está en la cola")
             return
-    except ValueError:
-        print("❌ Ingrese un número válido de días")
-        return
-    
-    # Confirmar
-    confirm = input(f"\n¿Confirmar préstamo de '{book.title}' a '{user.name}' por {days} días? (s/n): ").strip().lower()
-    
-    if confirm == "s":
-        loan = service_create_loan(isbn, user_id, days)
+
+        book.reservations.enqueue({
+            "user_id": user_id,
+            "date": datetime.now().strftime("%Y-%m-%d")
+        })
         
-        if loan:
-            print("\n✅ Préstamo creado exitosamente")
-            print_loan(loan)
-        else:
-            print("\n❌ No se pudo crear el préstamo")
+        update_book(book)
+
+        print("📌 Usuario agregado a la cola FIFO.")
+        return
+
+    # SÍ HAY STOCK → préstamo normal
+    days_input = input("\nDías de préstamo (14 por defecto): ").strip()
+    try:
+        days = int(days_input) if days_input else 14
+    except:
+        print("❌ Días inválidos")
+        return
+
+    confirm = input(f"\n¿Confirmar préstamo? (s/n): ").strip().lower()
+    if confirm != "s":
+        print("\n❌ Cancelado")
+        return
+
+    loan = create_loan(isbn, user_id, days)
+
+    if loan:
+        print("\n✅ Préstamo creado")
+        print_loan(loan)
     else:
-        print("\n❌ Operación cancelada")
+        print("\n❌ No se pudo crear")
 
 
-def return_loan():
-    """Opción 2: Devolver un préstamo"""
+# -------------------------------
+#  Opción 2 - Devolver préstamo
+# -------------------------------
+def option_return_loan():
     print_header("DEVOLVER PRÉSTAMO")
-    
-    # Mostrar préstamos activos primero
-    active_loans = service_get_active_loans()
-    
-    if not active_loans:
-        print("\n📦 No hay préstamos activos para devolver")
-        return
-    
-    print(f"\nPréstamos activos ({len(active_loans)}):")
-    for i, loan in enumerate(active_loans):
-        print_loan(loan, i)
-    
-    # Solicitar ID del préstamo
-    loan_id = input("\nIngrese ID del préstamo a devolver: ").strip()
-    if not loan_id:
-        print("❌ El ID no puede estar vacío")
-        return
-    
-    # Buscar el préstamo completo si solo pusieron el ID corto
-    loan_to_return = None
-    for loan in active_loans:
-        if loan.loan_id.startswith(loan_id) or loan.loan_id == loan_id:
-            loan_to_return = loan
-            break
-    
-    if not loan_to_return:
-        print(f"❌ No se encontró un préstamo activo con el ID: {loan_id}")
-        return
-    
-    print(f"\n📖 Préstamo a devolver:")
-    print_loan(loan_to_return)
-    
-    # Verificar si está vencido
-    if loan_to_return.is_overdue():
-        print(f"\n⚠️  ATENCIÓN: Este préstamo está vencido por {loan_to_return.days_overdue()} días")
-    
-    confirm = input("\n¿Confirmar devolución? (s/n): ").strip().lower()
-    
-    if confirm == "s":
-        result = service_return_loan(loan_to_return.loan_id)
-        
-        if result:
-            print("\n✅ Préstamo devuelto exitosamente")
-            print(f"   Libro devuelto: {result.book.title}")
-            print(f"   Usuario: {result.user.name}")
-            print(f"   Fecha devolución: {result.return_date.strftime('%Y-%m-%d')}")
-        else:
-            print("\n❌ No se pudo devolver el préstamo")
-    else:
-        print("\n❌ Operación cancelada")
 
-
-def list_active_loans():
-    """Opción 3: Listar préstamos activos"""
-    print_header("PRÉSTAMOS ACTIVOS")
-    
     loans = service_get_active_loans()
-    
     if not loans:
-        print("\n📦 No hay préstamos activos")
+        print("\nNo hay préstamos activos.")
         return
-    
-    print(f"\nTotal de préstamos activos: {len(loans)}")
-    
-    for i, loan in enumerate(loans):
-        print_loan(loan, i)
+
+    for i, ln in enumerate(loans):
+        print_loan(ln, i)
+
+    loan_id = input("\nID del préstamo a devolver: ").strip()
+    if not loan_id:
+        print("❌ ID vacío")
+        return
+
+    match = None
+    for ln in loans:
+        if ln.loan_id.startswith(loan_id) or ln.loan_id == loan_id:
+            match = ln
+            break
+
+    if not match:
+        print("❌ No encontrado")
+        return
+
+    print("\nPréstamo seleccionado:")
+    print_loan(match)
+
+    confirm = input("\n¿Confirmar devolución? (s/n): ").strip().lower()
+    if confirm != "s":
+        print("\n❌ Cancelado")
+        return
+
+    result = service_return_loan(match.loan_id)
+    if result:
+        print("\n✅ Devuelto correctamente")
+    else:
+        print("\n❌ No se pudo devolver")
 
 
-def list_overdue_loans():
-    """Opción 4: Listar préstamos vencidos"""
+# -------------------------------
+#  Otras opciones
+# -------------------------------
+def option_list_active():
+    print_header("PRÉSTAMOS ACTIVOS")
+    loans = service_get_active_loans()
+    if not loans:
+        print("\nSin préstamos activos")
+        return
+    for i, ln in enumerate(loans):
+        print_loan(ln, i)
+
+
+def option_list_overdue():
     print_header("PRÉSTAMOS VENCIDOS")
-    
     loans = service_get_overdue_loans()
-    
     if not loans:
-        print("\n✅ No hay préstamos vencidos")
+        print("\nNo hay vencidos")
         return
-    
-    print(f"\n⚠️  Total de préstamos vencidos: {len(loans)}")
-    
-    for i, loan in enumerate(loans):
-        print_loan(loan, i)
+    for i, ln in enumerate(loans):
+        print_loan(ln, i)
 
 
-def list_all_loans():
-    """Opción 5: Listar todos los préstamos"""
-    print_header("HISTORIAL DE PRÉSTAMOS")
-    
+def option_list_all():
+    print_header("HISTORIAL COMPLETO")
     loans = service_get_all_loans()
-    
     if not loans:
-        print("\n📦 No hay préstamos registrados")
+        print("\nNo hay préstamos")
         return
-    
-    print(f"\nTotal de préstamos: {len(loans)}")
-    
-    for i, loan in enumerate(loans):
-        print_loan(loan, i)
+    for i, ln in enumerate(loans):
+        print_loan(ln, i)
 
 
-def search_loans_by_user():
-    """Opción 6: Buscar préstamos por usuario"""
+def option_search_user():
     print_header("PRÉSTAMOS POR USUARIO")
-    
-    user_id = input("\nIngrese ID del usuario: ").strip()
-    if not user_id:
-        print("❌ El ID no puede estar vacío")
-        return
-    
-    # Verificar que el usuario existe
+    user_id = input("ID: ").strip()
     user = service_get_user_by_id(user_id)
     if not user:
-        print(f"❌ No se encontró un usuario con el ID: {user_id}")
+        print("Usuario no existe")
         return
-    
-    print(f"\n👤 Usuario: {user.name}")
-    
     loans = service_get_loans_by_user(user_id)
-    
-    if not loans:
-        print("\n📦 Este usuario no tiene préstamos registrados")
-        return
-    
-    print(f"\nTotal de préstamos: {len(loans)}")
-    active = sum(1 for loan in loans if not loan.returned)
-    print(f"Activos: {active} | Devueltos: {len(loans) - active}")
-    
-    for i, loan in enumerate(loans):
-        print_loan(loan, i)
+    for i, ln in enumerate(loans):
+        print_loan(ln, i)
 
 
-def search_loans_by_book():
-    """Opción 7: Buscar préstamos por libro"""
+def option_search_book():
     print_header("PRÉSTAMOS POR LIBRO")
-    
-    isbn = input("\nIngrese ISBN del libro: ").strip()
-    if not isbn:
-        print("❌ El ISBN no puede estar vacío")
-        return
-    
-    # Verificar que el libro existe
+    isbn = input("ISBN: ").strip()
     book = service_get_book_by_isbn(isbn)
     if not book:
-        print(f"❌ No se encontró un libro con el ISBN: {isbn}")
+        print("Libro no existe")
         return
-    
-    print(f"\n📖 Libro: {book.title}")
-    print(f"   Autor: {book.author}")
-    
     loans = service_get_loans_by_book(isbn)
-    
-    if not loans:
-        print("\n📦 Este libro no tiene préstamos registrados")
-        return
-    
-    print(f"\nTotal de préstamos: {len(loans)}")
-    active = sum(1 for loan in loans if not loan.returned)
-    print(f"Activos: {active} | Devueltos: {len(loans) - active}")
-    
-    for i, loan in enumerate(loans):
-        print_loan(loan, i)
+    for i, ln in enumerate(loans):
+        print_loan(ln, i)
 
 
-def renew_loan():
-    """Opción 8: Renovar un préstamo"""
+def option_renew():
     print_header("RENOVAR PRÉSTAMO")
-    
-    # Mostrar préstamos activos
-    active_loans = service_get_active_loans()
-    
-    if not active_loans:
-        print("\n📦 No hay préstamos activos para renovar")
+
+    loans = service_get_active_loans()
+    if not loans:
+        print("\nNo hay activos")
         return
-    
-    print(f"\nPréstamos activos ({len(active_loans)}):")
-    for i, loan in enumerate(active_loans):
-        print_loan(loan, i)
-    
-    # Solicitar ID del préstamo
-    loan_id = input("\nIngrese ID del préstamo a renovar: ").strip()
-    if not loan_id:
-        print("❌ El ID no puede estar vacío")
-        return
-    
-    # Buscar el préstamo
-    loan_to_renew = None
-    for loan in active_loans:
-        if loan.loan_id.startswith(loan_id) or loan.loan_id == loan_id:
-            loan_to_renew = loan
+
+    for i, ln in enumerate(loans):
+        print_loan(ln, i)
+
+    loan_id = input("\nID del préstamo: ").strip()
+
+    match = None
+    for ln in loans:
+        if ln.loan_id.startswith(loan_id) or ln.loan_id == loan_id:
+            match = ln
             break
-    
-    if not loan_to_renew:
-        print(f"❌ No se encontró un préstamo activo con el ID: {loan_id}")
+
+    if not match:
+        print("No encontrado")
         return
-    
-    print(f"\n📖 Préstamo a renovar:")
-    print_loan(loan_to_renew)
-    
-    # Solicitar días adicionales
+
+    days_input = input("Días adicionales (14 por defecto): ").strip()
     try:
-        days_input = input("\nIngrese días adicionales (por defecto 14): ").strip()
         days = int(days_input) if days_input else 14
-        
-        if days <= 0:
-            print("❌ Los días deben ser mayor a 0")
-            return
-    except ValueError:
-        print("❌ Ingrese un número válido de días")
+    except:
+        print("Inválido")
         return
-    
-    confirm = input(f"\n¿Confirmar renovación por {days} días adicionales? (s/n): ").strip().lower()
-    
-    if confirm == "s":
-        result = service_renew_loan(loan_to_renew.loan_id, days)
-        
-        if result:
-            print("\n✅ Préstamo renovado exitosamente")
-            print_loan(result)
-        else:
-            print("\n❌ No se pudo renovar el préstamo")
-    else:
-        print("\n❌ Operación cancelada")
+
+    confirm = input("¿Confirmar? (s/n): ").strip().lower()
+    if confirm != "s":
+        print("Cancelado")
+        return
+
+    result = service_renew_loan(match.loan_id, days)
+    if result:
+        print("\nRenovado")
+        print_loan(result)
 
 
-def view_loan_statistics():
-    """Opción 9: Ver estadísticas de préstamos"""
-    print_header("ESTADÍSTICAS DE PRÉSTAMOS")
-    
+def option_statistics():
+    print_header("ESTADÍSTICAS")
     stats = service_get_loan_statistics()
-    
-    print(f"\n📊 Resumen de préstamos:")
-    print(f"\n   Total de préstamos: {stats['total_loans']}")
-    print(f"   Préstamos activos: {stats['active_loans']}")
-    print(f"   Préstamos devueltos: {stats['returned_loans']}")
-    print(f"   Préstamos vencidos: {stats['overdue_loans']}")
-    print(f"   Préstamos al día: {stats['on_time_loans']}")
-    
-    if stats['active_loans'] > 0:
-        overdue_percentage = (stats['overdue_loans'] / stats['active_loans']) * 100
-        print(f"\n   Porcentaje de mora: {overdue_percentage:.1f}%")
+
+    print(f"\nTotal: {stats['total_loans']}")
+    print(f"Activos: {stats['active_loans']}")
+    print(f"Devueltos: {stats['returned_loans']}")
+    print(f"Vencidos: {stats['overdue_loans']}")
 
 
+# -------------------------------
+#  MENÚ PRINCIPAL
+# -------------------------------
 def show_menu():
-    """Muestra el menú principal de préstamos"""
-    print_header("SISTEMA DE GESTIÓN DE PRÉSTAMOS")
-    print("\n1. Crear nuevo préstamo")
+    print_header("SISTEMA DE PRÉSTAMOS")
+    print("1. Crear préstamo")
     print("2. Devolver préstamo")
-    print("3. Listar préstamos activos")
-    print("4. Listar préstamos vencidos")
-    print("5. Ver historial de préstamos")
-    print("6. Buscar préstamos por usuario")
-    print("7. Buscar préstamos por libro")
+    print("3. Listar activos")
+    print("4. Listar vencidos")
+    print("5. Historial completo")
+    print("6. Buscar por usuario")
+    print("7. Buscar por libro")
     print("8. Renovar préstamo")
-    print("9. Ver estadísticas de préstamos")
+    print("9. Ver estadísticas")
     print("0. Salir")
 
 
 def loan_menu():
-    """Función principal del menú de préstamos"""
     while True:
         clear_screen()
         show_menu()
-        
         option = input("\nSeleccione una opción: ").strip()
-        
+
         if option == "1":
-            create_loan()
+            option_create_loan()
         elif option == "2":
-            return_loan()
+            option_return_loan()
         elif option == "3":
-            list_active_loans()
+            option_list_active()
         elif option == "4":
-            list_overdue_loans()
+            option_list_overdue()
         elif option == "5":
-            list_all_loans()
+            option_list_all()
         elif option == "6":
-            search_loans_by_user()
+            option_search_user()
         elif option == "7":
-            search_loans_by_book()
+            option_search_book()
         elif option == "8":
-            renew_loan()
+            option_renew()
         elif option == "9":
-            view_loan_statistics()
+            option_statistics()
         elif option == "0":
-            print("\n👋 Regresando al menú principal...")
+            print("\n👋 Regresando...")
             break
         else:
-            print("\n❌ Opción no válida. Por favor, seleccione una opción del menú.")
-        
+            print("❌ Opción inválida")
+
         pause()
 
 

@@ -17,11 +17,11 @@ def show_main_menu():
     print("\n" + "=" * 60)
     print("  SISTEMA DE GESTIÓN DE BIBLIOTECA")
     print("=" * 60)
-    print("\n1. Gestión de Inventario (Libros)")
+    print("\n1. Gestión de Libros")
     print("2. Gestión de Estantes")
     print("3. Gestión de Préstamos")
     print("4. Gestión de Usuarios")
-    print("5. Reportes")    
+    print("5. Gestión de Reportes")    
     print("0. Salir")
 
 

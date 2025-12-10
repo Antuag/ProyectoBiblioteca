@@ -1,10 +1,10 @@
 from models.loan import Loan
-from models.book import Book
-from models.user import User
-from services.book_service import get_book_by_isbn, update_stock
+from services.book_service import update_stock
 from pathlib import Path
 import json
 from datetime import datetime, timedelta
+from services.history_service import push_history
+from services.book_service import update_book
 
 
 # Ruta segura (independiente del lugar donde ejecutes el programa)
@@ -81,8 +81,29 @@ def create_loan(isbn, user_id, days=14):
         return None
     
     if not book.isAvalible():
-        print(f"❌ El libro '{book.title}' no tiene stock disponible")
+        print("\n⚠️ Este libro no tiene stock.")
+
+    # Si el libro NO tiene stock → agregar a cola del book
+    if not book.isAvalible():
+
+    # evitar duplicados
+        for r in book.reservations.queue:
+            if r["user_id"] == user_id:
+                print("❌ Ya estás en la lista de espera.")
+                return None
+
+    # agregar a la cola interna del libro
+        book.reservations.enqueue({
+            "user_id": user_id,
+            "date": datetime.now().strftime("%Y-%m-%d")
+        })
+
+    # guardar en books.json
+        update_book(book)
+
+        print("📌 Se agregó el usuario a la lista de espera (cola FIFO).")
         return None
+    
     
     # Verificar que el usuario existe
     user = get_user_by_id(user_id)
@@ -120,6 +141,9 @@ def create_loan(isbn, user_id, days=14):
     user.add_loan(new_loan.loan_id)
     update_user(user)
     
+    #historial en pila lifo
+    push_history(user_id, isbn)
+    
     return new_loan
 
 
@@ -156,6 +180,20 @@ def return_loan(loan_id):
             
             # Aumentar stock del libro
             update_stock(loan_dict["isbn"], 1)
+            
+            # ¿Hay reservas?
+            next_user = dequeue_reservation(loan_dict["isbn"])
+
+            if next_user:
+                print("\n📌 Este libro tenía una reserva.")
+                print(f"   Usuario en turno: {next_user['user_id']}")
+
+            # Crear préstamo automático
+                from services.loan_service import create_loan
+                auto_loan = create_loan(loan_dict["isbn"], next_user["user_id"])
+
+                if auto_loan:
+                    print("✔ Se creó el préstamo automáticamente para el siguiente usuario en la cola.")
             
             # Remover préstamo del usuario
             user = get_user_by_id(loan_dict["user_id"])
