@@ -195,6 +195,7 @@ def report_total_value_by_author():
         print(f"\n💰 Valor total de los libros de '{author}': ${total_value:,}")
 
     pause()
+    
 def report_average_weight_by_author():
     """Reporte: Peso promedio de los libros de un autor usando recursión de cola."""
     print_header("REPORTE — PESO PROMEDIO POR AUTOR (RECURSIÓN DE COLA)")
@@ -245,7 +246,7 @@ def show_reporting_menu():
     print("5. Libros ordenados por valor COP")
     print("6. Valor total por autor (Recursión de Pila)")
     print("7. Peso promedio por autor (Recursión de Cola)")
-    print("6. Estantería óptima (Backtracking)")
+    print("8. Estantería óptima (Backtracking)")
     print("0. Volver al menú principal")
 
 
@@ -269,7 +270,7 @@ def reports_menu():
             report_total_value_by_author()
         elif op == "7":
             report_average_weight_by_author()
-        elif op == "6":
+        elif op == "8":
             report_optimal_shelf()
         elif op == "0":
             print("\nRegresando al menú principal...")
