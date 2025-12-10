@@ -4,7 +4,12 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # --- Algoritmos ---
 from algorithms.merge_sort import merge_sort_pairs
-from algorithms.report_recursive import recursive_show_stack, recursive_show_queue
+from algorithms.report_recursive import (
+    recursive_show_stack,
+    recursive_show_queue,
+    recursive_total_value_by_author,
+    tail_recursive_average_weight_by_author,
+)
 from algorithms.backtracking_shelf import optimal_shelf_backtracking, MAX_WEIGHT
 
 # --- Servicios ---
@@ -171,6 +176,45 @@ def report_books_sorted_by_value():
     pause()
 
 
+def report_total_value_by_author():
+    """Reporte: Valor total de los libros de un autor usando recursión de pila."""
+    print_header("REPORTE — VALOR TOTAL POR AUTOR (RECURSIÓN DE PILA)")
+
+    author = input("Nombre del autor: ").strip()
+    books = get_all_books()
+
+    if not books:
+        print("\n❌ No hay libros en el sistema.")
+        return
+
+    total_value = recursive_total_value_by_author(books, author)
+
+    if total_value == 0:
+        print(f"\n❌ No se encontraron libros del autor: {author}")
+    else:
+        print(f"\n💰 Valor total de los libros de '{author}': ${total_value:,}")
+
+    pause()
+def report_average_weight_by_author():
+    """Reporte: Peso promedio de los libros de un autor usando recursión de cola."""
+    print_header("REPORTE — PESO PROMEDIO POR AUTOR (RECURSIÓN DE COLA)")
+
+    author = input("Nombre del autor: ").strip()
+    books = get_all_books()
+
+    if not books:
+        print("\n❌ No hay libros en el sistema.")
+        return
+
+    avg_weight = tail_recursive_average_weight_by_author(books, author)
+
+    if avg_weight == 0:
+        print(f"\n❌ No se encontraron libros del autor: {author}")
+    else:
+        print(f"\n⚖️ Peso promedio de los libros de '{author}': {avg_weight:.2f} kg")
+
+    pause()
+
 def report_optimal_shelf():
     """Reporte de estantería óptima (Backtracking)"""
     print_header("REPORTE — ESTANTERÍA ÓPTIMA (BACKTRACKING)")
@@ -199,6 +243,8 @@ def show_reporting_menu():
     print("3. Reservas de un libro (Cola + Recursión)")
     print("4. Historial LIFO (Pila persistente)")
     print("5. Libros ordenados por valor COP")
+    print("6. Valor total por autor (Recursión de Pila)")
+    print("7. Peso promedio por autor (Recursión de Cola)")
     print("6. Estantería óptima (Backtracking)")
     print("0. Volver al menú principal")
 
@@ -220,6 +266,10 @@ def reports_menu():
         elif op == "5":
             report_books_sorted_by_value()
         elif op == "6":
+            report_total_value_by_author()
+        elif op == "7":
+            report_average_weight_by_author()
+        elif op == "6":
             report_optimal_shelf()
         elif op == "0":
             print("\nRegresando al menú principal...")
@@ -227,4 +277,3 @@ def reports_menu():
         else:
             print("\n❌ Opción no válida.")
             pause()
-
