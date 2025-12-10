@@ -1,243 +1,241 @@
 [
-    {
-        "isbn": "9780060935467",
-        "title": "Cien Años de Soledad",
-        "author": "Gabriel García Márquez",
-        "weight": 0.5,
-        "value": 42000,
-        "stock": 0,
-        "reservations": [
-            "2"
-        ]
-    },
-    {
-        "isbn": "9780062315007",
-        "title": "Matar a un Ruiseñor",
-        "author": "Harper Lee",
-        "weight": 0.4,
-        "value": 36000,
-        "stock": 0,
-        "reservations": [
-            {
-                "user_id": "2",
-                "date": "2025-12-09"
-            }
-        ]
-    },
-    {
-        "isbn": "9780062316097",
-        "title": "El Silencio de los Corderos",
-        "author": "Thomas Harris",
-        "weight": 0.45,
-        "value": 41000,
-        "stock": 14,
-        "reservations": []
-    },
-    {
-        "isbn": "9780141439518",
-        "title": "Orgullo y Prejuicio",
-        "author": "Jane Austen",
-        "weight": 0.4,
-        "value": 35000,
-        "stock": 14,
-        "reservations": []
-    },
-    {
-        "isbn": "9780141439520",
-        "title": "prueba numero 2",
-        "author": "autor prueba 2",
-        "weight": 1.0,
-        "value": 20000,
-        "stock": 5,
-        "reservations": []
-    },
-    {
-        "isbn": "9780141439600",
-        "title": "Ana Karenina",
-        "author": "León Tolstói",
-        "weight": 0.9,
-        "value": 62000,
-        "stock": 7,
-        "reservations": []
-    },
-    {
-        "isbn": "9780142437230",
-        "title": "Crimen y Castigo",
-        "author": "Fiódor Dostoyevski",
-        "weight": 0.7,
-        "value": 54000,
-        "stock": 9,
-        "reservations": []
-    },
-    {
-        "isbn": "9780307474278",
-        "title": "El Código Da Vinci",
-        "author": "Dan Brown",
-        "weight": 0.55,
-        "value": 44000,
-        "stock": 16,
-        "reservations": []
-    },
-    {
-        "isbn": "9780316769174",
-        "title": "El Guardián Entre el Centeno",
-        "author": "J.D. Salinger",
-        "weight": 0.35,
-        "value": 32000,
-        "stock": 8,
-        "reservations": []
-    },
-    {
-        "isbn": "9780316769488",
-        "title": "La Elegancia del Erizo",
-        "author": "Muriel Barbery",
-        "weight": 0.35,
-        "value": 37000,
-        "stock": 10,
-        "reservations": []
-    },
-    {
-        "isbn": "9780345816023",
-        "title": "Juego de Tronos",
-        "author": "George R.R. Martin",
-        "weight": 0.8,
-        "value": 68000,
-        "stock": 12,
-        "reservations": []
-    },
-    {
-        "isbn": "9780374528379",
-        "title": "Vida de Pi",
-        "author": "Yann Martel",
-        "weight": 0.4,
-        "value": 39000,
-        "stock": 13,
-        "reservations": []
-    },
-    {
-        "isbn": "9780439023528",
-        "title": "Los Juegos del Hambre",
-        "author": "Suzanne Collins",
-        "weight": 0.45,
-        "value": 42000,
-        "stock": 24,
-        "reservations": []
-    },
-    {
-        "isbn": "9780439708180",
-        "title": "Harry Potter y la Piedra Filosofal",
-        "author": "J.K. Rowling",
-        "weight": 0.45,
-        "value": 45000,
-        "stock": 30,
-        "reservations": []
-    },
-    {
-        "isbn": "9780451524935",
-        "title": "1984",
-        "author": "George Orwell",
-        "weight": 0.4,
-        "value": 38000,
-        "stock": 25,
-        "reservations": []
-    },
-    {
-        "isbn": "9780525478812",
-        "title": "El Alquimista",
-        "author": "Paulo Coelho",
-        "weight": 0.3,
-        "value": 34000,
-        "stock": 28,
-        "reservations": []
-    },
-    {
-        "isbn": "9780544003415",
-        "title": "El Señor de los Anillos",
-        "author": "J.R.R. Tolkien",
-        "weight": 1.2,
-        "value": 85000,
-        "stock": 10,
-        "reservations": []
-    },
-    {
-        "isbn": "9780547928227",
-        "title": "El Hobbit",
-        "author": "J.R.R. Tolkien",
-        "weight": 0.5,
-        "value": 48000,
-        "stock": 18,
-        "reservations": []
-    },
-    {
-        "isbn": "9780553418026",
-        "title": "Divergente",
-        "author": "Veronica Roth",
-        "weight": 0.5,
-        "value": 40000,
-        "stock": 20,
-        "reservations": []
-    },
-    {
-        "isbn": "9780743273565",
-        "title": "El Gran Gatsby",
-        "author": "F. Scott Fitzgerald",
-        "weight": 0.3,
-        "value": 28000,
-        "stock": 20,
-        "reservations": []
-    },
-    {
-        "isbn": "9788408043640",
-        "title": "La Sombra del Viento",
-        "author": "Carlos Ruiz Zafón",
-        "weight": 0.6,
-        "value": 52000,
-        "stock": 22,
-        "reservations": []
-    },
-    {
-        "isbn": "9788420412146",
-        "title": "Don Quijote de la Mancha",
-        "author": "Miguel de Cervantes",
-        "weight": 1.0,
-        "value": 65000,
-        "stock": 15,
-        "reservations": []
-    },
-    {
-        "isbn": "9788420651491",
-        "title": "Rayuela",
-        "author": "Julio Cortázar",
-        "weight": 0.6,
-        "value": 49000,
-        "stock": 8,
-        "reservations": []
-    },
-    {
-        "isbn": "9788432217180",
-        "title": "Los Pilares de la Tierra",
-        "author": "Ken Follett",
-        "weight": 1.1,
-        "value": 72000,
-        "stock": 11,
-        "reservations": []
-    },
-    {
-        "isbn": "9788437604947",
-        "title": "Crónica de una Muerte Anunciada",
-        "author": "Gabriel García Márquez",
-        "weight": 0.3,
-        "value": 32000,
-        "stock": 19,
-        "reservations": []
-    },
-    {
-        "isbn": "9788466331579",
-        "title": "La Casa de los Espíritus",
-        "author": "Isabel Allende",
-        "weight": 0.55,
-        "value": 46000,
-        "stock": 11,
-        "reservations": []
-    }
+  {
+    "isbn": "9780547928227",
+    "title": "El Hobbit",
+    "author": "J.R.R. Tolkien",
+    "weight": 0.5,
+    "value": 48000,
+    "stock": 18,
+    "reservations": []
+  },
+  {
+    "isbn": "9780316769174",
+    "title": "El Guardián Entre el Centeno",
+    "author": "J.D. Salinger",
+    "weight": 0.35,
+    "value": 32000,
+    "stock": 8,
+    "reservations": []
+  },
+  {
+    "isbn": "9780141439520",
+    "title": "prueba numero 2",
+    "author": "autor prueba 2",
+    "weight": 1.0,
+    "value": 20000,
+    "stock": 5,
+    "reservations": []
+  },
+  {
+    "isbn": "9780553418026",
+    "title": "Divergente",
+    "author": "Veronica Roth",
+    "weight": 0.5,
+    "value": 40000,
+    "stock": 20,
+    "reservations": []
+  },
+  {
+    "isbn": "9780439708180",
+    "title": "Harry Potter y la Piedra Filosofal",
+    "author": "J.K. Rowling",
+    "weight": 0.45,
+    "value": 45000,
+    "stock": 30,
+    "reservations": []
+  },
+  {
+    "isbn": "9788432217180",
+    "title": "Los Pilares de la Tierra",
+    "author": "Ken Follett",
+    "weight": 1.1,
+    "value": 72000,
+    "stock": 11,
+    "reservations": []
+  },
+  {
+    "isbn": "9780062316097",
+    "title": "El Silencio de los Corderos",
+    "author": "Thomas Harris",
+    "weight": 0.45,
+    "value": 41000,
+    "stock": 14,
+    "reservations": []
+  },
+  {
+    "isbn": "9780142437230",
+    "title": "Crimen y Castigo",
+    "author": "Fiódor Dostoyevski",
+    "weight": 0.7,
+    "value": 54000,
+    "stock": 9,
+    "reservations": []
+  },
+  {
+    "isbn": "9780544003415",
+    "title": "El Señor de los Anillos",
+    "author": "J.R.R. Tolkien",
+    "weight": 1.2,
+    "value": 85000,
+    "stock": 10,
+    "reservations": []
+  },
+  {
+    "isbn": "9780464528379",
+    "title": "Vida de Pi",
+    "author": "Yann Martel",
+    "weight": 0.4,
+    "value": 39000,
+    "stock": 13,
+    "reservations": []
+  },
+  {
+    "isbn": "9780451524935",
+    "title": "1984",
+    "author": "George Orwell",
+    "weight": 0.4,
+    "value": 38000,
+    "stock": 25,
+    "reservations": []
+  },
+  {
+    "isbn": "9788420651491",
+    "title": "Rayuela",
+    "author": "Julio Cortázar",
+    "weight": 0.6,
+    "value": 49000,
+    "stock": 8,
+    "reservations": []
+  },
+  {
+    "isbn": "9780743273565",
+    "title": "El Gran Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "weight": 0.3,
+    "value": 28000,
+    "stock": 20,
+    "reservations": []
+  },
+  {
+    "isbn": "9788437604947",
+    "title": "Crónica de una Muerte Anunciada",
+    "author": "Gabriel García Márquez",
+    "weight": 0.3,
+    "value": 32000,
+    "stock": 19,
+    "reservations": []
+  },
+  {
+    "isbn": "9780141439518",
+    "title": "Orgullo y Prejuicio",
+    "author": "Jane Austen",
+    "weight": 0.4,
+    "value": 35000,
+    "stock": 14,
+    "reservations": []
+  },
+  {
+    "isbn": "9780060935467",
+    "title": "Cien Años de Soledad",
+    "author": "Gabriel García Márquez",
+    "weight": 0.5,
+    "value": 42000,
+    "stock": 0,
+    "reservations": ["2"]
+  },
+  {
+    "isbn": "9780544003415",
+    "title": "El Código Da Vinci",
+    "author": "Dan Brown",
+    "weight": 0.55,
+    "value": 44000,
+    "stock": 16,
+    "reservations": []
+  },
+  {
+    "isbn": "9780307474278",
+    "title": "El Código Da Vinci",
+    "author": "Dan Brown",
+    "weight": 0.55,
+    "value": 44000,
+    "stock": 16,
+    "reservations": []
+  },
+  {
+    "isbn": "9788408043640",
+    "title": "La Sombra del Viento",
+    "author": "Carlos Ruiz Zafón",
+    "weight": 0.6,
+    "value": 52000,
+    "stock": 22,
+    "reservations": []
+  },
+  {
+    "isbn": "9788420412146",
+    "title": "Don Quijote de la Mancha",
+    "author": "Miguel de Cervantes",
+    "weight": 1.0,
+    "value": 65000,
+    "stock": 15,
+    "reservations": []
+  },
+  {
+    "isbn": "9780544003415",
+    "title": "El Alquimista",
+    "author": "Paulo Coelho",
+    "weight": 0.3,
+    "value": 34000,
+    "stock": 28,
+    "reservations": []
+  },
+  {
+    "isbn": "9780374528379",
+    "title": "Vida de Pi",
+    "author": "Yann Martel",
+    "weight": 0.4,
+    "value": 39000,
+    "stock": 13,
+    "reservations": []
+  },
+  {
+    "isbn": "9780439023528",
+    "title": "Los Juegos del Hambre",
+    "author": "Suzanne Collins",
+    "weight": 0.45,
+    "value": 42000,
+    "stock": 24,
+    "reservations": []
+  },
+  {
+    "isbn": "9788466331579",
+    "title": "La Casa de los Espíritus",
+    "author": "Isabel Allende",
+    "weight": 0.55,
+    "value": 46000,
+    "stock": 11,
+    "reservations": []
+  },
+  {
+    "isbn": "9780316769488",
+    "title": "La Elegancia del Erizo",
+    "author": "Muriel Barbery",
+    "weight": 0.35,
+    "value": 37000,
+    "stock": 10,
+    "reservations": []
+  },
+  {
+    "isbn": "9780062315007",
+    "title": "Matar a un Ruiseñor",
+    "author": "Harper Lee",
+    "weight": 0.4,
+    "value": 36000,
+    "stock": 0,
+    "reservations": [
+      {
+        "user_id": "2",
+        "date": "2025-12-09"
+      }
+    ]
+  }
 ]
