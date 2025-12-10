@@ -5,6 +5,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # --- Algoritmos ---
 from algorithms.merge_sort import merge_sort_pairs
 from algorithms.report_recursive import recursive_show_stack, recursive_show_queue
+from algorithms.backtracking_shelf import optimal_shelf_backtracking, MAX_WEIGHT
 
 # --- Servicios ---
 from services.book_service import get_all_books, get_book_by_isbn, _book_to_dict
@@ -170,6 +171,24 @@ def report_books_sorted_by_value():
     pause()
 
 
+def report_optimal_shelf():
+    """Reporte de estantería óptima (Backtracking)"""
+    print_header("REPORTE — ESTANTERÍA ÓPTIMA (BACKTRACKING)")
+    books = get_all_books()
+    if not books:
+        print("\n❌ No hay libros en el sistema.")
+        return
+    result, total_value = optimal_shelf_backtracking(books)
+    if not result:
+        print("\n❌ No hay combinación posible dentro del peso máximo.")
+        return
+    print(f"\nLibros seleccionados (máx {MAX_WEIGHT} kg):")
+    for book in result:
+        print(f"- {book.title} | {book.author} | {book.weight} kg | ${book.value}")
+    print(f"\nValor total: ${total_value}")
+    print(f"Peso total: {sum(b.weight for b in result):.2f} kg")
+    pause()
+
 
 #  MENÚ PRINCIPAL DE REPORTES
 
@@ -180,6 +199,7 @@ def show_reporting_menu():
     print("3. Reservas de un libro (Cola + Recursión)")
     print("4. Historial LIFO (Pila persistente)")
     print("5. Libros ordenados por valor COP")
+    print("6. Estantería óptima (Backtracking)")
     print("0. Volver al menú principal")
 
 
@@ -199,6 +219,8 @@ def reports_menu():
             report_lifo_history()
         elif op == "5":
             report_books_sorted_by_value()
+        elif op == "6":
+            report_optimal_shelf()
         elif op == "0":
             print("\nRegresando al menú principal...")
             break
