@@ -1,1 +1,0 @@
-"Inserción + Merge Sort"

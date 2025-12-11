@@ -1,0 +1,79 @@
+[
+    {
+        "loan_id": "3c6219e6-ff3a-411f-a149-ddb9721655a9",
+        "isbn": "123456",
+        "book_title": "cien años de soledad",
+        "user_id": "2",
+        "user_name": "andres el gay",
+        "loan_date": "2025-11-30",
+        "expiration_date": "2025-12-05",
+        "returned": true,
+        "return_date": "2025-11-30"
+    },
+    {
+        "loan_id": "19a47ce4-449c-4291-844e-cce27797953e",
+        "isbn": "9780141439518",
+        "book_title": "Orgullo y Prejuicio",
+        "user_id": "2",
+        "user_name": "andres el gay",
+        "loan_date": "2025-12-03",
+        "expiration_date": "2025-12-13",
+        "returned": true,
+        "return_date": "2025-12-10"
+    },
+    {
+        "loan_id": "97c696fc-5171-41c4-80b3-6ff01339a5b1",
+        "isbn": "9780316769488",
+        "book_title": "La Elegancia del Erizo",
+        "user_id": "2",
+        "user_name": "andres sopla pollas",
+        "loan_date": "2025-12-10",
+        "expiration_date": "2025-12-13",
+        "returned": true,
+        "return_date": "2025-12-10"
+    },
+    {
+        "loan_id": "3d8eef7e-7717-45e0-b4be-0e3c09461db4",
+        "isbn": "9788466331579",
+        "book_title": "La Casa de los Espíritus",
+        "user_id": "2",
+        "user_name": "andres sopla pollas",
+        "loan_date": "2025-12-10",
+        "expiration_date": "2025-12-19",
+        "returned": true,
+        "return_date": "2025-12-10"
+    },
+    {
+        "loan_id": "8a64129f-8194-4d59-9762-e9188d32b249",
+        "isbn": "9789999999999",
+        "book_title": "El nombre de la tierra",
+        "user_id": "2",
+        "user_name": "andres sopla pollas",
+        "loan_date": "2025-12-10",
+        "expiration_date": "2025-12-17",
+        "returned": true,
+        "return_date": "2025-12-10"
+    },
+    {
+        "loan_id": "a80a4664-c39c-48ee-8e5b-b9ed95318771",
+        "isbn": "9789999999999",
+        "book_title": "El nombre de la tierra",
+        "user_id": "2",
+        "user_name": "andres sopla pollas",
+        "loan_date": "2025-12-10",
+        "expiration_date": "2025-12-14",
+        "returned": true,
+        "return_date": "2025-12-10"
+    },
+    {
+        "loan_id": "341f3526-70b9-4514-acec-91a7900c28a4",
+        "isbn": "9780141439520",
+        "book_title": "prueba numero 2",
+        "user_id": "2",
+        "user_name": "andres sopla pollas",
+        "loan_date": "2025-12-10",
+        "expiration_date": "2025-12-17",
+        "returned": false,
+        "return_date": null
+    }
+]

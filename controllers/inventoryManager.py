@@ -1,1 +1,0 @@
-"Manejo de listas, carga, inserción ordenada"

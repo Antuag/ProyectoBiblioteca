@@ -1,10 +1,4 @@
-from structures.stack import Pila
-from structures.queue import Cola
+from controllers.main_menu import main
 
-p=Pila()
-p.apilar(10)
-
-c = Cola()
-c.encolar(10)
-
-print(c)
+if __name__ == "__main__":
+    main()

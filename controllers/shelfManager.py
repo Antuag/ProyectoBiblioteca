@@ -1,1 +1,0 @@
-"Fuerza bruta y backtracking"

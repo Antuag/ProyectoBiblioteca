@@ -1,0 +1,18 @@
+[
+    {
+        "id": "2",
+        "name": "andres sopla pollas",
+        "email": "soygay@gmail.com",
+        "phone": "25198981",
+        "loans": [
+            "341f3526-70b9-4514-acec-91a7900c28a4"
+        ]
+    },
+    {
+        "id": "3",
+        "name": "Fabian Elva ginon",
+        "email": null,
+        "phone": null,
+        "loans": []
+    }
+]
